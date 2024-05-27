@@ -45,6 +45,8 @@ public class CondeGenerator {
                             .enableFileOverride() // 覆盖已生成文件
                     ;
                 })
+                // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+//                .templateEngine(new FreemarkerTemplateEngine())
                 .execute();
 
     }
