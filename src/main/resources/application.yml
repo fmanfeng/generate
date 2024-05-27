@@ -1,24 +1,25 @@
-#端口号
+# 服务器配置
 server:
-  port: 9090
+  port: 9090 # 服务器端口号设置为9090
+
+# Spring框架相关配置
 spring:
-  datasource:
-    driver-class-name : com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/lbs_server?serverTimezone=GMT%2b8
-    username : root
-    password : 199906
+  datasource: # 数据源配置
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL数据库驱动类名
+    url: jdbc:mysql://localhost:3306/lbs_server?serverTimezone=GMT%2b8 # 数据库连接URL，连接本地的lbs_server数据库，时区设置为GMT+8
+    username: root # 数据库用户名
+    password: 199906 # 数据库密码
+  jackson:
+    date-format: yyyy-MM-dd # Jackson库的日期格式配置
+    time-zone: Asia/Shanghai # 时区配置为上海
   mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-mybatis:
-  mapper-locations: classpath:mapper/*.xml  #扫码端口号
-#  configuration: #mybatis 日志
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    format:
+      date: dd/MM/yyyy # Spring MVC的日期格式配置
+      date-time: yyyy-MM-dd HH:mm:ss # Spring MVC的日期时间格式配置
+
+# MyBatis-Plus相关配置
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-files:
-  upload:
-    path: F:/lbs-files/
-
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # MyBatis日志实现类，使用StdOutImpl将日志输出到控制台
+  mapper-locations: classpath:mapper/*.xml # Mapper XML文件的位置
+  type-aliases-package: com.authoritydemo.entity # MyBatis的类型别名包配置，指定实体类所在包
