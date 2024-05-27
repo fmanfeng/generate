@@ -1,0 +1,24 @@
+#端口号
+server:
+  port: 9090
+spring:
+  datasource:
+    driver-class-name : com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/lbs_server?serverTimezone=GMT%2b8
+    username : root
+    password : 199906
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #扫码端口号
+#  configuration: #mybatis 日志
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+files:
+  upload:
+    path: F:/lbs-files/
+

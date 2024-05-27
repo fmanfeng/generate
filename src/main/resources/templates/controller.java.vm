@@ -1,0 +1,143 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.web.bind.annotation.*;
+import javax.annotation.Resource;
+import java.util.List;
+
+
+import $!{package.Service}.$!{table.serviceName};
+import ${package.Entity}.${entity};
+
+
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    @Resource
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    //新增或者更新
+    @PostMapping
+    public boolean save(@RequestBody ${entity} ${table.entityPath}){
+            return ${table.entityPath}Service.saveOrUpdate(${table.entityPath});
+    }
+
+    //删除
+    @DeleteMapping("/{id}")
+    public Boolean delete(@PathVariable Integer id) {
+        return ${table.entityPath}Service.removeById(id);
+    }
+
+    //查询所有
+    @GetMapping
+    public List<${entity}> findAll() {
+            return ${table.entityPath}Service.list();
+    }
+
+    //根据id查询
+    @GetMapping("/{id}")
+    public ${entity} findOne(@PathVariable Integer id) {
+            return ${table.entityPath}Service.getById(id);
+    }
+
+    //分页查询  条件需要自己写  根据前端来写
+    @GetMapping("/page")
+    public Page<${entity}> findPage(@RequestParam Integer pageNum,
+                                    @RequestParam Integer pageSize) {
+
+            return ${table.entityPath}Service.page(new Page<>(pageNum, pageSize));
+
+        }
+
+
+    //导出接口
+##        @GetMapping("/export")
+##        public  void export(HttpServletResponse response) throws  Exception{
+##                //从数据库查询出所有的数据
+##                List<User> list  =userService.list();
+##                //通过工具栏创建writer 写出到磁盘路径
+##                //ExcelWriter writer = ExcelUtil.getWriter(filesUploadPath+"/用户信息.xlsx");
+##                //内存操作,写到浏览器
+##                ExcelWriter writer  = ExcelUtil.getWriter(true);
+##                //自定义标题名
+##                writer.addHeaderAlias("id","ID");
+##                writer.addHeaderAlias("username","用户名");
+##                writer.addHeaderAlias("password","密码");
+##                writer.addHeaderAlias("nickname","昵称");
+##                writer.addHeaderAlias("email","邮箱");
+##                writer.addHeaderAlias("phone","电话");
+##                writer.addHeaderAlias("address","地址");
+##                writer.addHeaderAlias("userImg","头像");
+##                writer.addHeaderAlias("createTime","创建时间");
+##                //一次性写出list内的对象到excel,使用默认样式,强制输出标题
+##                writer.write(list,true);
+##                //设置浏览器响应格式
+##                response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+##                String fileName = URLEncoder.encode("用户信息","UTF-8");
+##                response.setHeader("Content-Disposition","attachment;filename="+fileName+".xlsx");
+##                ServletOutputStream out= response.getOutputStream();
+##                writer.flush(out,true);
+##                out.close();
+##                writer.close();
+##                }
+
+    //导入
+##        @PostMapping("import")
+##        public boolean imp(MultipartFile file) throws Exception{
+##        InputStream inputStream = file.getInputStream();
+##        ExcelReader reader = ExcelUtil.getReader(inputStream);
+##        //1.要求表头是英文
+##        // List<User> list = reader.readAll(User.class);  //USER那边要加入@ToString注解   userService.saveBatch(list);
+##
+##        //2.方式 这里可以使用表头 从第二行开始读取
+##        List<List<Object>> list = reader.read(1);
+##        List<User> users = CollUtil.newArrayList();
+##        for (List<Object> row : list){
+##        User user = new User();
+##        user.setUsername(row.get(0).toString());
+##        user.setPassword(row.get(1).toString());
+##        user.setNickname(row.get(2).toString());
+##        user.setEmail(row.get(3).toString());
+##        user.setPhone(row.get(4).toString());
+##        user.setAddress(row.get(5).toString());
+##        user.setUserImg(row.get(6).toString());
+##        users.add(user);
+##        }
+##        //批量插入数据库
+##        userService.saveBatch(users);
+##        return true;
+##
+##        }
+}
+
+#end
