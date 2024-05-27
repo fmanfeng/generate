@@ -24,7 +24,7 @@ public class CondeGenerator {
                 })
                 // 策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("sys_department") // 设置需要生成的表名
+                    builder.addInclude("sys_department") // 设置需要生成的表名 “user”, “user1”,… 多个
                             .addTablePrefix("sys_") // 设置过滤表前缀
                             // Entity 策略配置
                             .entityBuilder()
